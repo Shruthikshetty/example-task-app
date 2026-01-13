@@ -18,6 +18,7 @@ export default antfu(
       "antfu/no-top-level-await": ["off"],
       "node/prefer-global/process": ["off"],
       "node/no-process-env": ["error"],
+      "style/comma-dangle": ["off"],
       "perfectionist/sort-imports": [
         "error",
         {
