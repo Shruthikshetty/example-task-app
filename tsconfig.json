@@ -4,9 +4,10 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "module": "NodeNext",
-    "types": [
-      "node"
-    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["node"],
     "strict": true,
     "outDir": "./dist",
     "verbatimModuleSyntax": true,
