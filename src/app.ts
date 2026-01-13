@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { logger } from "hono/logger";
+
+import { appLogger } from "./middleware/app-logger.js";
 
 // Zod OpenAPI Hono is an extended Hono class that supports OpenAPI. With it, you can validate values and types using Zod and generate OpenAPI Swagger documentation.
 const app = new OpenAPIHono();
@@ -9,8 +10,8 @@ app.get("/", (c) => {
   return c.text("example task app");
 });
 
-// app logger
-app.use(logger());
+// app logger TODO :- change with pino its lightweight and fast with better options
+app.use(appLogger);
 
 // custom error handler
 app.onError((err, c) => {
