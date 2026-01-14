@@ -10,8 +10,18 @@ app.get("/", (c) => {
   return c.text("example task app");
 });
 
-// app logger TODO :- change with pino its lightweight and fast with better options
+// app logger
 app.use(appLogger);
+
+// example route
+app.get("/example", (c) => {
+  // c.var.logger.info("example route");
+  return c.json({ message: "example route" });
+});
+
+app.get("/example-error", () => {
+  throw new Error("example error");
+});
 
 // custom error handler
 app.onError((err, c) => {
