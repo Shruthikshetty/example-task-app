@@ -3,13 +3,13 @@ import { pinoLogger } from "hono-pino";
 // config for pino logger
 export const appLogger = pinoLogger({
   pino: {
+    level: process.env?.LOG_LEVEL || "info",
     transport: {
       target: "pino-pretty",
       options: {
         colorize: true,
         translateTime: "SYS:standard",
         singleLine: true,
-        // VERIFICATION: 'ignore' hides the bulky default objects from the console
         ignore: "pid,hostname",
       },
     },

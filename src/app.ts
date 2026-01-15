@@ -1,9 +1,16 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { config } from "dotenv";
+import { expand } from "dotenv-expand";
+
+import type { AppBindings } from "./types.js";
 
 import { appLogger } from "./middleware/app-logger.js";
 
+//set up env's
+expand(config());
+
 // Zod OpenAPI Hono is an extended Hono class that supports OpenAPI. With it, you can validate values and types using Zod and generate OpenAPI Swagger documentation.
-const app = new OpenAPIHono();
+const app = new OpenAPIHono<AppBindings>();
 
 // base route
 app.get("/", (c) => {
