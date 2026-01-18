@@ -1,9 +1,11 @@
 import { pinoLogger } from "hono-pino";
 
+import env from "../../env.js";
+
 // config for pino logger
 export const appLogger = pinoLogger({
   pino: {
-    level: process.env?.LOG_LEVEL || "info",
+    level: env.LOG_LEVEL,
     transport: {
       target: "pino-pretty",
       options: {
