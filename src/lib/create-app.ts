@@ -4,11 +4,13 @@ import { serveEmojiFavicon } from "stoker/middlewares";
 import type { AppBindings } from "@/types.js";
 
 import { appLogger } from "@/middleware/app-logger.js";
+import errorHandler from "@/middleware/error-handler.js";
 
 export const createRouter = () => {
   // Zod OpenAPI Hono is an extended Hono class that supports OpenAPI. With it, you can validate values and types using Zod and generate OpenAPI Swagger documentation.
   const router = new OpenAPIHono<AppBindings>({
     strict: false,
+    defaultHook: errorHandler,
   });
 
   return router;

@@ -7,7 +7,7 @@ import app from "./app.js";
 serve(
   {
     fetch: app.fetch,
-    port: Number(env.PORT) || 3000,
+    port: Number(env.PORT),
   },
   (info) => {
     // eslint-disable-next-line no-console
