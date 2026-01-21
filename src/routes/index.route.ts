@@ -5,6 +5,7 @@ import { createRouter } from "@/lib/create-app.js";
 // create our base route "/"
 const router = createRouter().openapi(
   createRoute({
+    tags: ["index"],
     method: "get",
     path: "/",
     responses: {
