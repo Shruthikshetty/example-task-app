@@ -1,6 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatsCodes from "stoker/http-status-codes";
 
+import { zodNotFoundDocObject } from "@/constants/global.constants.js";
 import { addTaskSchema, selectTasksSchema } from "@/db/schema.js";
 import { AppValidationErrorSchema } from "@/zod-schemas/app-validation-error.schema.js";
 
@@ -81,22 +82,7 @@ export const getTaskById = createRoute({
       },
       description: "Requested task",
     },
-    [HttpStatsCodes.NOT_FOUND]: {
-      content: {
-        "application/json": {
-          schema: z
-            .object({
-              message: z.string(),
-            })
-            .openapi({
-              example: {
-                message: "Not found",
-              },
-            }),
-        },
-      },
-      description: "Task not found",
-    },
+    [HttpStatsCodes.NOT_FOUND]: zodNotFoundDocObject,
     [HttpStatsCodes.UNPROCESSABLE_ENTITY]: {
       content: {
         "application/json": {

@@ -10,3 +10,11 @@ export const AppValidationErrorSchema = z.object({
     fieldErrors: z.record(z.string(), z.array(z.string())),
   }),
 });
+
+/*
+defines a zod schema for not found error
+*/
+
+export const AppNotFoundErrorSchema = z.object({
+  message: z.string(),
+});
