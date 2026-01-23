@@ -1,5 +1,6 @@
 import { defineConfig } from "drizzle-kit";
 
+// @ts-expect-error - drizzle-kit needs .ts, but main tsconfig is NodeNext
 import env from "./env.ts";
 
 export default defineConfig({

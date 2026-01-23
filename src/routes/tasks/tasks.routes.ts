@@ -1,6 +1,8 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatsCodes from "stoker/http-status-codes";
 
+import { selectTasksSchema } from "@/db/schema.js";
+
 export const list = createRoute({
   tags: ["tasks"],
   path: "/tasks",
@@ -9,12 +11,7 @@ export const list = createRoute({
     [HttpStatsCodes.OK]: {
       content: {
         "application/json": {
-          schema: z.array(
-            z.object({
-              name: z.string(),
-              done: z.boolean(),
-            }),
-          ),
+          schema: z.array(selectTasksSchema),
         },
       },
       description: "The list of tasks",
