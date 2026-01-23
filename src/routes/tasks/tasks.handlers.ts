@@ -1,3 +1,5 @@
+import * as HttpStatsCodes from "stoker/http-status-codes";
+
 import type { AppRouteHandler } from "@/types.js";
 
 import db from "@/db/index.js";
@@ -18,5 +20,5 @@ export const addTask: AppRouteHandler<AddTaskRoute> = async (c) => {
   // insert the new task
   const [addedTask] = await db.insert(tasks).values(newTask).returning();
   // return the tasks as json
-  return c.json(addedTask);
+  return c.json(addedTask, HttpStatsCodes.OK);
 };

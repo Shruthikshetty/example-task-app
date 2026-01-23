@@ -18,7 +18,9 @@ export const tasks = sqliteTable("tasks", {
 //create zod schema for select tasks
 export const selectTasksSchema = createSelectSchema(tasks);
 //create zod schema for add task
-export const addTaskSchema = createInsertSchema(tasks)
+export const addTaskSchema = createInsertSchema(tasks, {
+  name: (field) => field.min(1).max(500),
+})
   .required({
     done: true,
   })

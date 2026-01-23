@@ -2,6 +2,7 @@ import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatsCodes from "stoker/http-status-codes";
 
 import { addTaskSchema, selectTasksSchema } from "@/db/schema.js";
+import { AppValidationErrorSchema } from "@/zod-schemas/app-validation-error.schema.js";
 
 export const getTasks = createRoute({
   tags: ["tasks"],
@@ -42,6 +43,14 @@ export const addTask = createRoute({
         },
       },
       description: "Added task response",
+    },
+    [HttpStatsCodes.UNPROCESSABLE_ENTITY]: {
+      content: {
+        "application/json": {
+          schema: AppValidationErrorSchema,
+        },
+      },
+      description: "Validation error response",
     },
   },
 });
