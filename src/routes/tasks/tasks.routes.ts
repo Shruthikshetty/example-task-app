@@ -55,6 +55,60 @@ export const addTask = createRoute({
   },
 });
 
+export const getTaskById = createRoute({
+  tags: ["tasks"],
+  path: "/tasks/{id}",
+  method: "get",
+  request: {
+    params: z.object({
+      id: z.coerce.number().openapi({
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+          description: "Task id",
+        },
+        example: 2,
+      }),
+    }),
+  },
+  responses: {
+    [HttpStatsCodes.OK]: {
+      content: {
+        "application/json": {
+          schema: selectTasksSchema,
+        },
+      },
+      description: "Requested task",
+    },
+    [HttpStatsCodes.NOT_FOUND]: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              message: z.string(),
+            })
+            .openapi({
+              example: {
+                message: "Not found",
+              },
+            }),
+        },
+      },
+      description: "Task not found",
+    },
+    [HttpStatsCodes.UNPROCESSABLE_ENTITY]: {
+      content: {
+        "application/json": {
+          schema: AppValidationErrorSchema,
+        },
+      },
+      description: "Invalid id",
+    },
+  },
+});
+
 //export types
 export type GetTasksRoute = typeof getTasks;
 export type AddTaskRoute = typeof addTask;
+export type GetTaskByIdRoute = typeof getTaskById;
