@@ -18,6 +18,7 @@ const configureOpenApi = (app: AppOpenApi) => {
     Scalar({
       url: "/doc",
       theme: "kepler",
+      layout: "classic",
       defaultHttpClient: {
         clientKey: "fetch",
         targetKey: "js",
