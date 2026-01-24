@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { testClient } from "hono/testing";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
@@ -10,6 +11,7 @@ import {
   it,
 } from "vitest";
 
+import db from "@/db/index.js";
 import createApp, { createTestApp } from "@/lib/create-app.js";
 
 import router from "./tasks.index.js";
@@ -20,7 +22,12 @@ describe("tasks list", () => {
   });
 
   afterAll(async () => {
-    fs.rmSync("test.db", { force: true });
+    //clean up db
+    const tableNames = ["tasks"];
+
+    for (const table of tableNames) {
+      await db.run(sql.raw(`DELETE FROM ${table}`));
+    }
   });
 
   it("post /tasks creates a task", async () => {
