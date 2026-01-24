@@ -145,8 +145,41 @@ export const updateTask = createRoute({
   },
 });
 
+export const deleteTask = createRoute({
+  tags: ["tasks"],
+  path: "/tasks/{id}",
+  method: "delete",
+  request: {
+    params: z.object({
+      id: z.coerce.number().openapi({
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+          description: "Task id",
+        },
+        example: 2,
+      }),
+    }),
+  },
+  responses: {
+    [HttpStatsCodes.NO_CONTENT]: {
+      description: "Task deleted successfully",
+    },
+    [HttpStatsCodes.NOT_FOUND]: zodNotFoundDocObject,
+    [HttpStatsCodes.UNPROCESSABLE_ENTITY]: {
+      content: {
+        "application/json": {
+          schema: AppValidationErrorSchema,
+        },
+      },
+      description: "Validation error response",
+    },
+  },
+});
 //export types
 export type GetTasksRoute = typeof getTasks;
 export type AddTaskRoute = typeof addTask;
 export type GetTaskByIdRoute = typeof getTaskById;
 export type UpdateTaskRoute = typeof updateTask;
+export type DeleteTaskRoute = typeof deleteTask;

@@ -8,6 +8,7 @@ import { tasks } from "@/db/schema.js";
 
 import type {
   AddTaskRoute,
+  DeleteTaskRoute,
   GetTaskByIdRoute,
   GetTasksRoute,
   UpdateTaskRoute,
@@ -60,4 +61,17 @@ export const updateTask: AppRouteHandler<UpdateTaskRoute> = async (c) => {
   }
   // return the updated task as json
   return c.json(task, HttpStatsCodes.OK);
+};
+
+export const deleteTask: AppRouteHandler<DeleteTaskRoute> = async (c) => {
+  // get id from req
+  const { id } = c.req.valid("param");
+  // delete the task
+  const result = await db.delete(tasks).where(eq(tasks.id, id));
+  // in case there is no task found
+  if (result.rowsAffected === 0) {
+    return c.json({ message: "Not found" }, HttpStatsCodes.NOT_FOUND);
+  }
+  // return no content
+  return c.body(null, HttpStatsCodes.NO_CONTENT);
 };

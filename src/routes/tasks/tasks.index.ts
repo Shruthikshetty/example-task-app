@@ -7,6 +7,7 @@ const router = createRouter()
   .openapi(routes.getTasks, handlers.getTasks)
   .openapi(routes.addTask, handlers.addTask)
   .openapi(routes.getTaskById, handlers.getTaskById)
-  .openapi(routes.updateTask, handlers.updateTask);
+  .openapi(routes.updateTask, handlers.updateTask)
+  .openapi(routes.deleteTask, handlers.deleteTask);
 
 export default router;
