@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { serveEmojiFavicon } from "stoker/middlewares";
 
-import type { AppBindings } from "@/types.js";
+import type { AppBindings, AppOpenApi } from "@/types.js";
 
 import { appLogger } from "@/middleware/app-logger.js";
 import errorHandler from "@/middleware/error-handler.js";
@@ -47,3 +47,10 @@ const createApp = () => {
 };
 
 export default createApp;
+
+// so that our test can have all the middlewares
+export function createTestApp(router: AppOpenApi) {
+  const testApp = createApp();
+  testApp.route("/", router);
+  return testApp;
+}
