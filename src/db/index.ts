@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/libsql";
 import env from "../../env.js";
 import * as schema from "./schema.js";
 
-const client = createClient({
+export const client = createClient({
   url: env.DATABASE_URL,
   authToken: env.DATABASE_AUTH_TOKEN,
 });

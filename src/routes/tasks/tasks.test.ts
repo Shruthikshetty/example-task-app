@@ -1,11 +1,44 @@
 import { testClient } from "hono/testing";
-import { describe, expect, expectTypeOf, it } from "vitest";
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import {
+  afterAll,
+  beforeAll,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+} from "vitest";
 
 import createApp, { createTestApp } from "@/lib/create-app.js";
 
 import router from "./tasks.index.js";
 
 describe("tasks list", () => {
+  beforeAll(async () => {
+    execSync("bun drizzle-kit push");
+  });
+
+  afterAll(async () => {
+    fs.rmSync("test.db", { force: true });
+  });
+
+  it("post /tasks creates a task", async () => {
+    const client = testClient(createApp().route("/", router));
+    const response = await client.tasks.$post({
+      json: {
+        name: "test",
+        done: false,
+      },
+    });
+    expect(response.status).toBe(200);
+    if (response.status === 200) {
+      const json = await response.json();
+      expect(json.name).toBe("test");
+      expect(json.done).toBe(false);
+    }
+  });
+
   it("responds with list of tasks", async () => {
     const testRouter = createTestApp(router);
     const response = await testRouter.request("/tasks");

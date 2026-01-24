@@ -1,9 +1,18 @@
+/* eslint-disable node/no-process-env */
 import { config } from "dotenv";
 import { expand } from "dotenv-expand";
+import path from "node:path";
 import { z } from "zod";
 
 //set up env's
-expand(config());
+expand(
+  config({
+    path: path.resolve(
+      process.cwd(),
+      process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+    ),
+  }),
+);
 
 const EnvSchema = z
   .object({
@@ -32,7 +41,6 @@ type ENV = z.infer<typeof EnvSchema>;
 let tempEnv: ENV;
 
 try {
-  // eslint-disable-next-line node/no-process-env
   tempEnv = EnvSchema.parse(process.env);
 } catch (err) {
   const error = err as z.ZodError;
