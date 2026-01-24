@@ -29,3 +29,5 @@ export const addTaskSchema = createInsertSchema(tasks, {
     updatedAt: true,
     id: true,
   });
+// create zod schema for update task
+export const patchTasksSchema = addTaskSchema.partial();

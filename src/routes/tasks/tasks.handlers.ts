@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import * as HttpStatsCodes from "stoker/http-status-codes";
 
 import type { AppRouteHandler } from "@/types.js";
@@ -9,6 +10,7 @@ import type {
   AddTaskRoute,
   GetTaskByIdRoute,
   GetTasksRoute,
+  UpdateTaskRoute,
 } from "./tasks.routes.js";
 
 export const getTasks: AppRouteHandler<GetTasksRoute> = async (c) => {
@@ -38,5 +40,24 @@ export const getTaskById: AppRouteHandler<GetTaskByIdRoute> = async (c) => {
   // in case task not found
   if (!task) return c.json({ message: "Not found" }, HttpStatsCodes.NOT_FOUND);
   // return the task as json
+  return c.json(task, HttpStatsCodes.OK);
+};
+
+export const updateTask: AppRouteHandler<UpdateTaskRoute> = async (c) => {
+  // get id from req
+  const { id } = c.req.valid("param");
+  // get the updated task data
+  const updatedTaskData = c.req.valid("json");
+  // update the task
+  const [task] = await db
+    .update(tasks)
+    .set(updatedTaskData)
+    .where(eq(tasks.id, id))
+    .returning();
+  // in case there is no task found
+  if (!task) {
+    return c.json({ message: "Not found" }, HttpStatsCodes.NOT_FOUND);
+  }
+  // return the updated task as json
   return c.json(task, HttpStatsCodes.OK);
 };

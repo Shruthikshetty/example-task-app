@@ -2,7 +2,11 @@ import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatsCodes from "stoker/http-status-codes";
 
 import { zodNotFoundDocObject } from "@/constants/global.constants.js";
-import { addTaskSchema, selectTasksSchema } from "@/db/schema.js";
+import {
+  addTaskSchema,
+  patchTasksSchema,
+  selectTasksSchema,
+} from "@/db/schema.js";
 import { AppValidationErrorSchema } from "@/zod-schemas/app-validation-error.schema.js";
 
 export const getTasks = createRoute({
@@ -94,7 +98,55 @@ export const getTaskById = createRoute({
   },
 });
 
+export const updateTask = createRoute({
+  tags: ["tasks"],
+  path: "/tasks/{id}",
+  method: "patch",
+  request: {
+    params: z.object({
+      id: z.coerce.number().openapi({
+        param: {
+          name: "id",
+          in: "path",
+          required: true,
+          description: "Task id",
+        },
+        example: 2,
+      }),
+    }),
+    body: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: patchTasksSchema,
+        },
+      },
+      description: "Task to update",
+    },
+  },
+  responses: {
+    [HttpStatsCodes.OK]: {
+      content: {
+        "application/json": {
+          schema: selectTasksSchema,
+        },
+      },
+      description: "Updated task response",
+    },
+    [HttpStatsCodes.NOT_FOUND]: zodNotFoundDocObject,
+    [HttpStatsCodes.UNPROCESSABLE_ENTITY]: {
+      content: {
+        "application/json": {
+          schema: AppValidationErrorSchema,
+        },
+      },
+      description: "Validation error response",
+    },
+  },
+});
+
 //export types
 export type GetTasksRoute = typeof getTasks;
 export type AddTaskRoute = typeof addTask;
 export type GetTaskByIdRoute = typeof getTaskById;
+export type UpdateTaskRoute = typeof updateTask;
