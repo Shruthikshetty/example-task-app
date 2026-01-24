@@ -1,5 +1,5 @@
 import { testClient } from "hono/testing";
-import { describe, expectTypeOf, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import createApp, { createTestApp } from "@/lib/create-app.js";
 
@@ -19,5 +19,16 @@ describe("tasks list", () => {
     const response = await client.tasks.$get();
     const result = await response.json();
     expectTypeOf(result).toBeArray();
+  });
+
+  it("validates adding a new task", async () => {
+    const client = testClient(createApp().route("/", router));
+    const response = await client.tasks.$post({
+      //@ts-expect-error name is required
+      json: {
+        done: false,
+      },
+    });
+    expect(response.status).toBe(422);
   });
 });
